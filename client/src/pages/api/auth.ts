@@ -18,7 +18,7 @@ export default async function handler(
   try {
     const { access_token, refresh_token } = req.body;
 
-    // setSession(access_token as string, refresh_token as string, res);
+    setSession(access_token as string, refresh_token as string, res);
 
     res.status(200);
     return res.end();
