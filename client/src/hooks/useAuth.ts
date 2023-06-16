@@ -6,17 +6,16 @@ const useAuth = () => {
   const doLogin = async () => {
     try {
       const data = await authService.login();
-      const { access_token, refresh_token } = data.user;
+      // const { access_token, refresh_token } = data.user;
+      // if (data.user) {
+      //   const res = await axios.post(
+      //     "/api/auth",
+      //     { access_token, refresh_token },
+      //     { baseURL: "http://localhost:3001" }
+      //   );
       if (data.user) {
-        const res = await axios.post(
-          "/api/auth",
-          { access_token, refresh_token },
-          { baseURL: "http://localhost:3001" }
-        );
-        if (res?.status === 200) {
-          // @ts-ignore
-          window.location = `/`;
-        }
+        // @ts-ignore
+        window.location = `/test`;
       }
     } catch (error: any) {
       console.log(error);
