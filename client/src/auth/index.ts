@@ -60,12 +60,11 @@ export const refreshSession = async () => {
         refresh_token,
       });
       if (accessToken) {
-        const res = await axios.post(
+        await axios.post(
           "/api/auth",
           { access_token: accessToken },
           { baseURL: "http://localhost:3001" }
         );
-
         return accessToken;
       }
     }
