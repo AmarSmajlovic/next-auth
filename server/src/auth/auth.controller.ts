@@ -7,6 +7,7 @@ import {
   Request,
   Get,
   Req,
+  Response,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto } from 'src/user/user.dto';
@@ -22,8 +23,8 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(AuthGuard('local'))
-  async login(@Request() req) {
-    return this.authService.login(req);
+  async login(@Request() req, @Response({ passthrough: true }) res) {
+    return this.authService.login(req, res);
   }
 
   @Post('register')
@@ -64,9 +65,17 @@ export class AuthController {
   }
 
   @Post('refresh')
-  refreshToken(@Body() { refresh_token }: { refresh_token: string }): {
+  async refreshToken(
+    @Request() req,
+    @Response({ passthrough: true }) res,
+  ): Promise<{
     accessToken: string;
-  } {
-    return this.authService.refreshToken(refresh_token);
+  }> {
+    const cookies = req.cookies;
+    const token = await this.authService.refreshToken(
+      cookies.refresh_token,
+      res,
+    );
+    return token;
   }
 }

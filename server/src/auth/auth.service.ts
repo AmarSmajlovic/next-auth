@@ -1,6 +1,6 @@
-import { Injectable, Req, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Req, Res, UnauthorizedException } from '@nestjs/common';
 import { UserService } from 'src/user/users.service';
-import { isPasswordMatch } from 'src/utils';
+import { generateCookieToken, isPasswordMatch } from 'src/utils';
 import { JwtAuthService } from './jwt.service';
 
 @Injectable()
@@ -21,22 +21,36 @@ export class AuthService {
     return null;
   }
 
-  async login(@Req() req): Promise<any> {
+  async login(@Req() req, @Res() res: any): Promise<any> {
     const user = req.user._doc;
-    const access_token = this.jwtService.generateAccessToken(user._id);
-    const refresh_token = this.jwtService.generateRefreshToken(user._id);
+    const access_token = await this.jwtService.generateAccessToken(user._id);
+    const refresh_token = await this.jwtService.generateRefreshToken(user._id);
+
+    const accessTokenCookie = generateCookieToken('access_token', access_token);
+    const refreshTokenCookie = generateCookieToken(
+      'refresh_token',
+      refresh_token,
+    );
+
+    res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
+
     return {
-      meessage: 'User Info from Database',
+      message: 'User Info from Database',
       user: { ...req.user._doc, access_token, refresh_token },
     };
   }
 
-  refreshToken(refreshToken: string): { accessToken: string } {
+  async refreshToken(
+    refreshToken: string,
+    @Res() res,
+  ): Promise<{ accessToken: string }> {
     const payload = this.jwtService.verifyToken(refreshToken);
     if (!payload) {
       throw new UnauthorizedException('Invalid refresh token');
     }
-    const accessToken = this.jwtService.generateAccessToken(payload.sub);
+    const accessToken = await this.jwtService.generateAccessToken(payload.sub);
+    const accessTokenCookie = generateCookieToken('access_token', accessToken);
+    res.setHeader('Set-Cookie', accessTokenCookie);
     return { accessToken };
   }
 
