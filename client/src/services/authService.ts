@@ -1,16 +1,6 @@
 import axios from "axios";
-import { api } from "./Client";
 
 export class AuthService {
-  async test(): Promise<any> {
-    try {
-      const res = await api.get("/restaurants");
-      return res.data;
-    } catch (error: any) {
-      return error.response.data;
-    }
-  }
-
   async login(): Promise<any> {
     try {
       const res = await axios.post(

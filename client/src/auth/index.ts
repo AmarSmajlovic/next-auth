@@ -1,45 +1,11 @@
-import { NextApiResponse } from "next";
-import cookie from "cookie";
-import { verify, decode, sign, JwtPayload } from "jsonwebtoken";
-import { IncomingMessage } from "http";
 import axios from "axios";
+import { NextRequest } from "next/server";
 
-// const setCookie = (tokenName: string, token: string) => {
-//   const data = decode(token) as any;
-//   const expiresIn = data.exp;
-
-//   const currentTime = Math.floor(Date.now() / 1000);
-//   const maxAge = expiresIn - currentTime;
-
-//   const cookieStr = cookie.serialize(tokenName, token, {
-//     maxAge,
-//     path: "/",
-//   });
-
-//   return cookieStr;
-// };
-
-// export const setSession = (
-//   access_token: string,
-//   refresh_token?: string,
-//   res?: NextApiResponse
-// ) => {
-//   const cookies = [];
-//   const accesToken = setCookie("access_token", access_token);
-//   cookies.push(accesToken);
-//   if (refresh_token) {
-//     const refreshToken = setCookie("refresh_token", refresh_token as string);
-//     cookies.push(refreshToken);
-//   }
-//   res?.setHeader("Set-Cookie", cookies);
-// };
-
-export const getSession = (req?: IncomingMessage): any | null => {
+export const getSession = (req?: NextRequest): any | null => {
   if (req) {
     try {
-      const cookies = cookie.parse(req.headers.cookie || "");
-      const refresh_token = cookies.refresh_token;
-      return refresh_token as string;
+      const token = req.cookies.get("refresh_token");
+      return token?.value;
     } catch (e) {
       return null;
     }

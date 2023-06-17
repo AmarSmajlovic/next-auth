@@ -1,5 +1,5 @@
-import { getSession, refreshSession } from "@/auth";
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import { refreshSession } from "@/auth";
+import axios, { AxiosInstance } from "axios";
 import cookie from "cookie";
 
 export const api: AxiosInstance = axios.create({
