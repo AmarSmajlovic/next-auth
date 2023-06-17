@@ -8,6 +8,7 @@ import {
   Get,
   Req,
   Response,
+  Res,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto } from 'src/user/user.dto';
@@ -40,7 +41,7 @@ export class AuthController {
     }
   }
 
-  @Get()
+  @Get('google')
   @UseGuards(AuthGuard('google'))
   async googleAuth(@Req() req) {
     return req.user;
@@ -48,8 +49,11 @@ export class AuthController {
 
   @Get('auth/google/callback')
   @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req) {
-    return this.authService.googleLogin(req);
+  async googleAuthRedirect(@Req() req, @Res() res) {
+    const user: any = await this.authService.googleLogin(req);
+    return res.redirect(
+      `http://localhost:3001/login?accessToken=${user.access_token}&refreshToken=${user.refresh_token}`,
+    );
   }
 
   @Get()
