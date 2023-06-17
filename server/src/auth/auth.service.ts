@@ -60,8 +60,12 @@ export class AuthService {
     } else {
       const user = await this.usersService.findUserByEmail(req.user.email);
       if (user) {
-        const access_token = this.jwtService.generateAccessToken(user._id);
-        const refresh_token = this.jwtService.generateRefreshToken(user._id);
+        const access_token = await this.jwtService.generateAccessToken(
+          user._id,
+        );
+        const refresh_token = await this.jwtService.generateRefreshToken(
+          user._id,
+        );
         return {
           message: 'User Info from Google',
           user: req.user,
@@ -70,8 +74,10 @@ export class AuthService {
         };
       }
       const storedUser = await this.usersService.store(req.user);
-      const access_token = this.jwtService.generateAccessToken(storedUser._id);
-      const refresh_token = this.jwtService.generateRefreshToken(
+      const access_token = await this.jwtService.generateAccessToken(
+        storedUser._id,
+      );
+      const refresh_token = await this.jwtService.generateRefreshToken(
         storedUser._id,
       );
       return {
