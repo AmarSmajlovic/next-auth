@@ -17,6 +17,18 @@ export class AuthService {
       return error.response.data;
     }
   }
+
+  async loginGoogle(): Promise<any> {
+    try {
+      window.open(
+        `http://localhost:3000/google`,
+        "_self",
+        "width=500,height=600"
+      );
+    } catch (error: any) {
+      return error.response.data;
+    }
+  }
 }
 
 export const authService = new AuthService();
