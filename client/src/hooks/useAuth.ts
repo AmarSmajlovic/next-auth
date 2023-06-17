@@ -12,8 +12,15 @@ const useAuth = () => {
       console.log(error);
     }
   };
+  const doLoginGoogle = async () => {
+    try {
+      await authService.loginGoogle();
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
-  return { doLogin };
+  return { doLogin, doLoginGoogle };
 };
 
 export default useAuth;
