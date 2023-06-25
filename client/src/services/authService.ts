@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export class AuthService {
+class AuthService {
   async login(): Promise<any> {
     try {
       const res = await axios.post(

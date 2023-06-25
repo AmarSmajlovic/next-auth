@@ -1,11 +1,9 @@
 import useAuth from "@/hooks/useAuth";
 import { GetServerSidePropsContext } from "next";
-import { useRouter } from "next/router";
 import cookie from "cookie";
 import { generateMaxAgeToken } from "@/utils";
 
 export default function Login() {
-  const router = useRouter();
   const { doLogin, doLoginGoogle } = useAuth();
 
   return (
@@ -41,7 +39,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       serializedAccessToken,
       serializedRefreshToken,
     ]);
-    res.writeHead(307, { Location: "/test" });
+    res.writeHead(307, { Location: "/profile" });
     res.end();
   }
 
