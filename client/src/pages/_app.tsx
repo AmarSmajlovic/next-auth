@@ -1,7 +1,6 @@
 import * as React from "react";
 import { AppContext, AppProps } from "next/app";
-import { UserDetailsProvider } from "@/contexts";
-import { getSession } from "@/auth";
+import { getSession, AuthProvider } from "@/auth";
 
 type MyAppProps = {
   session: boolean;
@@ -9,9 +8,9 @@ type MyAppProps = {
 
 export default function MyApp({ Component, session, ...props }: MyAppProps) {
   return (
-    <UserDetailsProvider session={session}>
+    <AuthProvider session={session}>
       <Component {...props} />
-    </UserDetailsProvider>
+    </AuthProvider>
   );
 }
 

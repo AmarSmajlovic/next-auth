@@ -1,0 +1,13 @@
+version: '3'
+services:
+  api:
+    build: .
+    container_name: api
+    volumes:
+      - .:/usr/src/app/project
+    environment:
+      MONGODB_URI: mongodb+srv://Cluster08084:QxlQPbgHAzo0a2tG@cluster0.ze49hhq.mongodb.net/sample_restaurants
+      JWT_SECRET_CONST: "SECRETJWT123123"
+    ports:
+      - "3000:3000"
+
