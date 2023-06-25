@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { CreateUserDto, StoreUserDto } from './user.dto';
 import { User } from './user.schema';
+import { ObjectId } from 'mongodb';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -31,7 +32,12 @@ export class UserService {
     id: mongoose.Types.ObjectId | string,
   ): Promise<User | null> {
     try {
-      const user = await this.userModel.findById(id).exec();
+      const objectId = new ObjectId(id);
+      const user = await this.userModel
+        .findById(objectId)
+        .select('-password')
+        .exec();
+
       return user;
     } catch (error) {
       throw new Error('User cannot be found');

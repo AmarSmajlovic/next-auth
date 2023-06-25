@@ -20,7 +20,7 @@ export class User {
 
   @Prop()
   @Optional()
-  password: string;
+  password?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
