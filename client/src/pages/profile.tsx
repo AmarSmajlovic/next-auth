@@ -1,7 +1,7 @@
-import { useUserDetails } from "@/hooks/useUserDetails";
+import { useAuth } from "@/auth";
 import React from "react";
 
 export default function Profile() {
-  const { userDetails } = useUserDetails();
+  const { userDetails } = useAuth();
   return <div>{JSON.stringify(userDetails)}</div>;
 }
