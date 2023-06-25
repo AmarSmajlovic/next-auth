@@ -1,7 +1,7 @@
-import useAuth from "@/hooks/useAuth";
 import { GetServerSidePropsContext } from "next";
 import cookie from "cookie";
 import { generateMaxAgeToken } from "@/utils";
+import { useAuth } from "@/auth";
 
 export default function Login() {
   const { doLogin, doLoginGoogle } = useAuth();

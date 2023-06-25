@@ -1,19 +1,20 @@
-import { createContext, useState, useEffect } from "react";
 import { userService } from "@/services/userService";
 import { UserDetails } from "@/types/user";
+import { createContext, useEffect, useState } from "react";
 
-export type UserContextState = {
+export type AuthContextState = {
+  session: boolean;
   userDetails: UserDetails | null;
 };
 
 type Props = {
-  session?: boolean;
+  session: boolean;
   children?: React.ReactNode;
 };
 
-export const UserContext = createContext<UserContextState | null>(null);
+export const AuthContext = createContext<AuthContextState | null>(null);
 
-export const UserDetailsProvider = ({ children, session }: Props) => {
+export const AuthProvider = ({ children, session }: Props) => {
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
 
   useEffect(() => {
@@ -25,10 +26,9 @@ export const UserDetailsProvider = ({ children, session }: Props) => {
       getDetails();
     }
   }, [session]);
-
   return (
-    <UserContext.Provider value={{ userDetails }}>
+    <AuthContext.Provider value={{ session, userDetails }}>
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   );
 };
