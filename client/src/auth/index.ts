@@ -1,11 +1,13 @@
 import axios from "axios";
-import { NextRequest } from "next/server";
+import cookie from "cookie";
+import { NextPageContext } from "next";
 
-export const getSession = (req?: NextRequest): any | null => {
-  if (req) {
+export const getSession = (ctx?: NextPageContext): any | null => {
+  if (ctx?.req) {
     try {
-      const token = req.cookies.get("refresh_token");
-      return token?.value;
+      const parsedCookies = cookie.parse(ctx.req.headers.cookie as string);
+      const refreshToken = parsedCookies.refresh_token;
+      return refreshToken;
     } catch (e) {
       return null;
     }
