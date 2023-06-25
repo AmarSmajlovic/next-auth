@@ -1,10 +1,9 @@
 import { createContext, useState, useEffect } from "react";
 import { userService } from "@/services/userService";
-import { decodeRefreshToken } from "@/utils";
+import { UserDetails } from "@/types/user";
 
 export type UserContextState = {
-  userDetails: any;
-  setUserDetails: any;
+  userDetails: UserDetails | null;
 };
 
 type Props = {
@@ -15,21 +14,20 @@ type Props = {
 export const UserContext = createContext<UserContextState | null>(null);
 
 export const UserDetailsProvider = ({ children, session }: Props) => {
-  const [userDetails, setUserDetails] = useState<any>(null);
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
 
   useEffect(() => {
     const getDetails = async () => {
-      const token = decodeRefreshToken();
-      const res = await userService.getUserDetails(token.sub as string);
+      const res = await userService.getUserDetails();
       setUserDetails(res);
     };
     if (session) {
       getDetails();
     }
-  }, []);
+  }, [session]);
 
   return (
-    <UserContext.Provider value={{ userDetails, setUserDetails }}>
+    <UserContext.Provider value={{ userDetails }}>
       {children}
     </UserContext.Provider>
   );
