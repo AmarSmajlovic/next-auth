@@ -12,7 +12,7 @@ export const useAuth = () => {
       const data = await authService.login();
       if (data.user) {
         // @ts-ignore
-        window.location = `/test`;
+        window.location = `/profile`;
       }
     } catch (error: any) {
       console.log(error);
@@ -26,7 +26,19 @@ export const useAuth = () => {
     }
   };
 
-  return { session, userDetails, doLogin, doLoginGoogle };
+  const doLogout = async () => {
+    try {
+      const res = await axios.get("/api/auth/logout");
+      if (res.status === 200) {
+        // @ts-ignore
+        window.location = "/login";
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return { session, userDetails, doLogin, doLoginGoogle, doLogout };
 };
 
 export const getSession = (ctx?: NextPageContext): any | null => {
